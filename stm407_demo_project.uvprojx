@@ -565,17 +565,42 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>Memory</GroupName>
+          <GroupName>User</GroupName>
           <Files>
             <File>
-              <FileName>Memory.c</FileName>
+              <FileName>main.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Memory\Memory.c</FilePath>
+              <FilePath>.\User\main.c</FilePath>
             </File>
             <File>
-              <FileName>Memory.h</FileName>
+              <FileName>main.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\Memory\Memory.h</FilePath>
+              <FilePath>.\User\main.h</FilePath>
+            </File>
+            <File>
+              <FileName>startup_stm32f407xx.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>.\User\startup_stm32f407xx.s</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_msp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\User\stm32f4xx_hal_msp.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_it.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\User\stm32f4xx_it.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_it.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\User\stm32f4xx_it.h</FilePath>
+            </File>
+            <File>
+              <FileName>system_stm32f4xx.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\User\system_stm32f4xx.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -655,42 +680,17 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>User</GroupName>
+          <GroupName>Memory</GroupName>
           <Files>
             <File>
-              <FileName>main.c</FileName>
+              <FileName>Memory.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\User\main.c</FilePath>
+              <FilePath>.\Memory\Memory.c</FilePath>
             </File>
             <File>
-              <FileName>main.h</FileName>
+              <FileName>Memory.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\User\main.h</FilePath>
-            </File>
-            <File>
-              <FileName>startup_stm32f407xx.s</FileName>
-              <FileType>2</FileType>
-              <FilePath>.\User\startup_stm32f407xx.s</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_hal_msp.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\User\stm32f4xx_hal_msp.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_it.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\User\stm32f4xx_it.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_it.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\User\stm32f4xx_it.h</FilePath>
-            </File>
-            <File>
-              <FileName>system_stm32f4xx.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\User\system_stm32f4xx.c</FilePath>
+              <FilePath>.\Memory\Memory.h</FilePath>
             </File>
           </Files>
         </Group>

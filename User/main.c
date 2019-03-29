@@ -1,24 +1,28 @@
 #include "main.h"
 #include "SysClock.h"
 #include "arm_base_define.h"
+#include "MyTask.h"
 #include "SysTime.h"
 #include "SysGpio.h"
-#include "MyTask.h"
+#include "SysUart.h"
+
 
 int main(void)
 {
 	HAL_Init();
 	SystemClock_Config();
+	delay_init(168);
 	MX_TIM3_Init();
 	MX_GPIO_Init();
+	MX_USART1_UART_Init();
 	start_system();
-	while(1)
-	{
+//	while(1)
+//	{
 //		SET_GPIO_H(LED1_GPIO);
 //		HAL_Delay(200);
 //		SET_GPIO_L(LED1_GPIO);
 //		HAL_Delay(200);
-	}
+//	}
 }
 
 /**
