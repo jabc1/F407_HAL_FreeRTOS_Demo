@@ -8,3 +8,6 @@
 1、添加系统systick delay 移植原子
 2、添加相关驱动带信息传输则使用dma
 3、add uart dma 相关驱动测试ok
+4、添加fifo test ok
+5、添加独立看门狗相关驱动程序
+6、添加重定向功能使用dma和不用dma

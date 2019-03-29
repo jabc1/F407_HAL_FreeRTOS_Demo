@@ -2,6 +2,7 @@
 #include "SysClock.h"
 #include "arm_base_define.h"
 #include "MyTask.h"
+#include "Memory.h"
 #include "SysTime.h"
 #include "SysGpio.h"
 #include "SysUart.h"
@@ -14,7 +15,11 @@ int main(void)
 	delay_init(168);
 	MX_TIM3_Init();
 	MX_GPIO_Init();
+	MX_DMA_Init();
 	MX_USART1_UART_Init();
+	MX_USART2_UART_Init();
+	MX_USART3_UART_Init();
+	Init_memory();
 	start_system();
 //	while(1)
 //	{

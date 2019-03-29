@@ -1,6 +1,6 @@
 #include "FreeRTOS.h"
 #include "task.h"
-
+#include "Memory.h"
 #include "MyTask.h"
 #include "SysGpio.h"
 #include "SysUart.h"
@@ -61,27 +61,38 @@ void led0_task(void *pvParameters)
 	u8 i;
 	while(1)
 	{
-		for(i=0;i<2;i++)
+		for(i=0;i<50;i++)
 		{
 			SET_GPIO_H(LED1_GPIO);
-			delay_xms(20);
+			delay_us(20);
 			SET_GPIO_L(LED1_GPIO);
-			delay_xms(20);
+			delay_us(20);
 		}
-		vTaskDelay(500);
+		vTaskDelay(100);
 	}
 }   
 
 void led1_task(void *pvParameters)
 {
+	u8 buf[11];
 	while(1)
 	{
-		if(UsartType.RX_flag)		// Receive flag
+//		if(UsartType.RX_flag)		// Receive flag
+//		{
+//			UsartType.RX_flag=0;	// clean flag
+//			HAL_UART_Transmit_DMA(&huart1, UsartType.RX_pData, UsartType.RX_Size);
+//		}
+		if(!fifo_empty(&Uart1Fifo))
 		{
-			UsartType.RX_flag=0;	// clean flag
-			HAL_UART_Transmit_DMA(&huart1, UsartType.RX_pData, UsartType.RX_Size);
+			memset(buf,0,sizeof(buf));
+			if(fifo_gets(&Uart1Fifo,buf,10))
+			{
+				//HAL_UART_Transmit_DMA(&huart1,buf,10);
+				printf("printf==%s\n",buf);
+				myprintf(&huart1,"dma printf=%s\n",buf);
+			}
 		}
-		vTaskDelay(1);
+		vTaskDelay(50);
 	}
 }
 

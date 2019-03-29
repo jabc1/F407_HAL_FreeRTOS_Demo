@@ -17,6 +17,7 @@ Modify Time:
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdarg.h>
 
 #ifndef TRUE
 #define	TRUE							1

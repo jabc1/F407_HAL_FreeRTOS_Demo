@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F407xx</Define>
               <Undefine></Undefine>
-              <IncludePath>.\User;.\HAL_lib\STM32F4xx_HAL_Driver\Inc;.\HAL_lib\STM32F4xx_HAL_Driver\Inc\Legacy;.\Core;.\Sys;.\Base;.\App;.\Config;.\FreeRTOS\include;.\FreeRTOS\portable\RVDS\ARM_CM4F;.\FreeRTOS</IncludePath>
+              <IncludePath>.\User;.\HAL_lib\STM32F4xx_HAL_Driver\Inc;.\HAL_lib\STM32F4xx_HAL_Driver\Inc\Legacy;.\Core;.\Sys;.\Base;.\App;.\Config;.\FreeRTOS\include;.\FreeRTOS\portable\RVDS\ARM_CM4F;.\FreeRTOS;.\Memory</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -691,6 +691,16 @@
               <FileName>Memory.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\Memory\Memory.h</FilePath>
+            </File>
+            <File>
+              <FileName>Fifo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Memory\Fifo.c</FilePath>
+            </File>
+            <File>
+              <FileName>Fifo.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Memory\Fifo.h</FilePath>
             </File>
           </Files>
         </Group>
