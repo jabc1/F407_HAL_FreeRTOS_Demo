@@ -12,6 +12,7 @@ Modify Time:
 #define _arm_base_define_
 
 #include "stm32f4xx_hal.h"
+#include "Debugprintf.h"
 
 #include <stdbool.h>
 #include <stdio.h>

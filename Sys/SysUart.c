@@ -29,12 +29,12 @@ void MX_DMA_Init(void)
 //	/* DMA1_Stream3_IRQn interrupt configuration */
 //	HAL_NVIC_SetPriority(DMA1_Stream3_IRQn, 5, 0);
 //	HAL_NVIC_EnableIRQ(DMA1_Stream3_IRQn);
-//	/* DMA1_Stream5_IRQn interrupt configuration */
-//	HAL_NVIC_SetPriority(DMA1_Stream5_IRQn, 5, 0);
-//	HAL_NVIC_EnableIRQ(DMA1_Stream5_IRQn);
-//	/* DMA1_Stream6_IRQn interrupt configuration */
-//	HAL_NVIC_SetPriority(DMA1_Stream6_IRQn, 5, 0);
-//	HAL_NVIC_EnableIRQ(DMA1_Stream6_IRQn);
+	/* DMA1_Stream5_IRQn interrupt configuration */
+	HAL_NVIC_SetPriority(DMA1_Stream5_IRQn, 5, 0);
+	HAL_NVIC_EnableIRQ(DMA1_Stream5_IRQn);
+	/* DMA1_Stream6_IRQn interrupt configuration */
+	HAL_NVIC_SetPriority(DMA1_Stream6_IRQn, 5, 0);
+	HAL_NVIC_EnableIRQ(DMA1_Stream6_IRQn);
 	/* DMA2_Stream2_IRQn interrupt configuration */
 	HAL_NVIC_SetPriority(DMA2_Stream2_IRQn, 5, 0);
 	HAL_NVIC_EnableIRQ(DMA2_Stream2_IRQn);
@@ -133,21 +133,6 @@ void DMA2_Stream7_IRQHandler(void)
 	HAL_DMA_IRQHandler(&hdma_usart1_tx);
 }
 
-
-void USART3_IRQHandler(void)
-{
-	HAL_UART_IRQHandler(&huart3);
-}
-void DMA1_Stream1_IRQHandler(void)
-{
-	HAL_DMA_IRQHandler(&hdma_usart3_rx);
-}
-void DMA1_Stream3_IRQHandler(void)
-{
-	HAL_DMA_IRQHandler(&hdma_usart3_tx);
-}
-
-
 void USART2_IRQHandler(void)
 {
 //	u16 temp;
@@ -170,6 +155,22 @@ void DMA1_Stream6_IRQHandler(void)
 {
 	HAL_DMA_IRQHandler(&hdma_usart2_tx);
 }
+
+void USART3_IRQHandler(void)
+{
+	HAL_UART_IRQHandler(&huart3);
+}
+void DMA1_Stream1_IRQHandler(void)
+{
+	HAL_DMA_IRQHandler(&hdma_usart3_rx);
+}
+void DMA1_Stream3_IRQHandler(void)
+{
+	HAL_DMA_IRQHandler(&hdma_usart3_tx);
+}
+
+
+
 
 
 
