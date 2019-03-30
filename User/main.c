@@ -17,8 +17,8 @@ int main(void)
 	MX_GPIO_Init();
 	MX_DMA_Init();
 	MX_USART1_UART_Init();
-	MX_USART2_UART_Init();
-	MX_USART3_UART_Init();
+//	MX_USART2_UART_Init();
+//	MX_USART3_UART_Init();
 	Init_memory();
 	start_system();
 //	while(1)

@@ -4,6 +4,7 @@
 #include "MyTask.h"
 #include "SysGpio.h"
 #include "SysUart.h"
+#include "Debugprintf.h"
 
 //任务优先级
 #define START_TASK_PRIO		1
@@ -58,38 +59,35 @@ void start_task(void *pvParameters)
 
 void led0_task(void *pvParameters)
 {
-	u8 i;
+	u8 i=0;
 	while(1)
 	{
-		for(i=0;i<50;i++)
+		i = !i;
+		if(i)
 		{
 			SET_GPIO_H(LED1_GPIO);
-			delay_us(20);
-			SET_GPIO_L(LED1_GPIO);
-			delay_us(20);
 		}
+		else
+		{
+			SET_GPIO_L(LED1_GPIO);
+		}
+		//printf_dma("uart1 dma printf\n");
 		vTaskDelay(100);
 	}
-}   
+}
 
 void led1_task(void *pvParameters)
 {
-	u8 buf[11];
+	u8 buf[10];
 	while(1)
 	{
-//		if(UsartType.RX_flag)		// Receive flag
-//		{
-//			UsartType.RX_flag=0;	// clean flag
-//			HAL_UART_Transmit_DMA(&huart1, UsartType.RX_pData, UsartType.RX_Size);
-//		}
 		if(!fifo_empty(&Uart1Fifo))
 		{
 			memset(buf,0,sizeof(buf));
 			if(fifo_gets(&Uart1Fifo,buf,10))
 			{
 				//HAL_UART_Transmit_DMA(&huart1,buf,10);
-				printf("printf==%s\n",buf);
-				myprintf(&huart1,"dma printf=%s\n",buf);
+				printf_dma("uart1 dma printf %s\n",buf);
 			}
 		}
 		vTaskDelay(50);

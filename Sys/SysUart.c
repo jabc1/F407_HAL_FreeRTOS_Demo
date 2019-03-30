@@ -1,10 +1,5 @@
 #include "SysUart.h"
 #include "Memory.h"
-UART_HandleTypeDef huart1;
-DMA_HandleTypeDef hdma_usart1_rx;
-DMA_HandleTypeDef hdma_usart1_tx;
-
-USART_RECEIVETYPE UsartType;
 
 UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
@@ -15,6 +10,9 @@ DMA_HandleTypeDef hdma_usart2_rx;
 DMA_HandleTypeDef hdma_usart2_tx;
 DMA_HandleTypeDef hdma_usart3_rx;
 DMA_HandleTypeDef hdma_usart3_tx;
+
+UartDMA_t Uart1DMA;
+UartDMA_t Uart2DMA;
 /** 
   * Enable DMA controller clock
   */
@@ -25,18 +23,18 @@ void MX_DMA_Init(void)
 	__HAL_RCC_DMA1_CLK_ENABLE();
 
 	/* DMA interrupt init */
-	/* DMA1_Stream1_IRQn interrupt configuration */
-	HAL_NVIC_SetPriority(DMA1_Stream1_IRQn, 5, 0);
-	HAL_NVIC_EnableIRQ(DMA1_Stream1_IRQn);
-	/* DMA1_Stream3_IRQn interrupt configuration */
-	HAL_NVIC_SetPriority(DMA1_Stream3_IRQn, 5, 0);
-	HAL_NVIC_EnableIRQ(DMA1_Stream3_IRQn);
-	/* DMA1_Stream5_IRQn interrupt configuration */
-	HAL_NVIC_SetPriority(DMA1_Stream5_IRQn, 5, 0);
-	HAL_NVIC_EnableIRQ(DMA1_Stream5_IRQn);
-	/* DMA1_Stream6_IRQn interrupt configuration */
-	HAL_NVIC_SetPriority(DMA1_Stream6_IRQn, 5, 0);
-	HAL_NVIC_EnableIRQ(DMA1_Stream6_IRQn);
+//	/* DMA1_Stream1_IRQn interrupt configuration */
+//	HAL_NVIC_SetPriority(DMA1_Stream1_IRQn, 5, 0);
+//	HAL_NVIC_EnableIRQ(DMA1_Stream1_IRQn);
+//	/* DMA1_Stream3_IRQn interrupt configuration */
+//	HAL_NVIC_SetPriority(DMA1_Stream3_IRQn, 5, 0);
+//	HAL_NVIC_EnableIRQ(DMA1_Stream3_IRQn);
+//	/* DMA1_Stream5_IRQn interrupt configuration */
+//	HAL_NVIC_SetPriority(DMA1_Stream5_IRQn, 5, 0);
+//	HAL_NVIC_EnableIRQ(DMA1_Stream5_IRQn);
+//	/* DMA1_Stream6_IRQn interrupt configuration */
+//	HAL_NVIC_SetPriority(DMA1_Stream6_IRQn, 5, 0);
+//	HAL_NVIC_EnableIRQ(DMA1_Stream6_IRQn);
 	/* DMA2_Stream2_IRQn interrupt configuration */
 	HAL_NVIC_SetPriority(DMA2_Stream2_IRQn, 5, 0);
 	HAL_NVIC_EnableIRQ(DMA2_Stream2_IRQn);
@@ -49,7 +47,6 @@ void MX_DMA_Init(void)
 
 void MX_USART1_UART_Init(void)
 {
-
 	huart1.Instance = USART1;
 	huart1.Init.BaudRate = 115200;
 	huart1.Init.WordLength = UART_WORDLENGTH_8B;
@@ -63,7 +60,7 @@ void MX_USART1_UART_Init(void)
 		_Error_Handler(__FILE__, __LINE__);
 	}
 	//开启dma接收
-	HAL_UART_Receive_DMA(&huart1, UsartType.RX_pData, RX_LEN);  
+	HAL_UART_Receive_DMA(&huart1, Uart1DMA.RX_pData,RX_LEN);  
 	//开启串口中断
 	__HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);
 }
@@ -84,7 +81,10 @@ void MX_USART2_UART_Init(void)
 	{
 		_Error_Handler(__FILE__, __LINE__);
 	}
-
+	//开启dma接收
+	HAL_UART_Receive_DMA(&huart2, Uart2DMA.RX_pData,RX_LEN);  
+	//开启串口中断
+	__HAL_UART_ENABLE_IT(&huart2, UART_IT_IDLE);
 }
 /* USART3 init function */
 
@@ -105,38 +105,80 @@ void MX_USART3_UART_Init(void)
 	}
 
 }
-#pragma import(__use_no_semihosting)             
-//标准库需要的支持函数                 
-struct __FILE
+
+void UsartReceive_IDLE(UART_HandleTypeDef *huart)  
 {
-	int handle;
- 
-};
-FILE __stdout;
-//定义_sys_exit()以避免使用半主机模式    
-void _sys_exit(int x)
-{
-	x = x;
+	u16 temp;  
+	if((__HAL_UART_GET_FLAG(huart,UART_FLAG_IDLE) != RESET))  
+	{
+		__HAL_UART_CLEAR_IDLEFLAG(&huart1);
+		HAL_UART_DMAStop(&huart1);
+		temp = huart1.hdmarx->Instance->NDTR;
+		Uart1DMA.RX_Size =  RX_LEN - temp;
+		HAL_UART_Receive_DMA(&huart1,Uart1DMA.RX_pData,RX_LEN);
+		fifo_puts(&Uart1Fifo,Uart1DMA.RX_pData,Uart1DMA.RX_Size);
+	}
 }
-//不使用DMA发送
-int fputc(int ch,FILE *f)
+void USART1_IRQHandler(void)
 {
-	while((USART1->SR & 0x40) == 0);
-	USART1->DR = (uint8_t)ch;
-	return ch;
+	UsartReceive_IDLE(&huart1); 
+	HAL_UART_IRQHandler(&huart1);
 }
-//使用DMA发送
-void myprintf(UART_HandleTypeDef *huart, char *fmt,...)
+void DMA2_Stream2_IRQHandler(void)
 {
-	char buffer[200];
-	uint8_t len=0;
-	va_list arg_ptr;
-	va_start(arg_ptr, fmt);
-	len = _vsnprintf(buffer,200, fmt, arg_ptr);
-	//HAL_UART_Transmit(huart, (uint8_t*)buffer, len, 1*len);
-	while(HAL_BUSY == HAL_UART_Transmit_DMA(huart,  (uint8_t*)buffer, len));
-	va_end(arg_ptr);
+	HAL_DMA_IRQHandler(&hdma_usart1_rx);
 }
+void DMA2_Stream7_IRQHandler(void)
+{
+	HAL_DMA_IRQHandler(&hdma_usart1_tx);
+}
+
+
+void USART3_IRQHandler(void)
+{
+	HAL_UART_IRQHandler(&huart3);
+}
+void DMA1_Stream1_IRQHandler(void)
+{
+	HAL_DMA_IRQHandler(&hdma_usart3_rx);
+}
+void DMA1_Stream3_IRQHandler(void)
+{
+	HAL_DMA_IRQHandler(&hdma_usart3_tx);
+}
+
+
+void USART2_IRQHandler(void)
+{
+//	u16 temp;
+	HAL_UART_IRQHandler(&huart2);
+//	if(__HAL_UART_GET_FLAG(&huart2,UART_FLAG_IDLE) != RESET)
+//	{
+//		__HAL_UART_CLEAR_IDLEFLAG(&huart2);
+//		HAL_UART_DMAStop(&huart2);
+//		temp = huart2.hdmarx->Instance->NDTR;
+//		Uart2DMA.RX_Size =  RX_LEN - temp;
+//		HAL_UART_Receive_DMA(&huart2,Uart2DMA.RX_pData,RX_LEN);
+//		fifo_puts(&Uart1Fifo,Uart2DMA.RX_pData,Uart2DMA.RX_Size);
+//	}
+}
+void DMA1_Stream5_IRQHandler(void)
+{
+	HAL_DMA_IRQHandler(&hdma_usart2_rx);
+}
+void DMA1_Stream6_IRQHandler(void)
+{
+	HAL_DMA_IRQHandler(&hdma_usart2_tx);
+}
+
+
+
+
+
+
+
+
+
 
 
 
@@ -380,62 +422,7 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
 
 
 
-void UsartReceive_IDLE(UART_HandleTypeDef *huart)  
-{
-	u16 temp;  
-	if((__HAL_UART_GET_FLAG(huart,UART_FLAG_IDLE) != RESET))  
-	{
-		__HAL_UART_CLEAR_IDLEFLAG(&huart1);
-		HAL_UART_DMAStop(&huart1);
-		temp = huart1.hdmarx->Instance->NDTR;
-		UsartType.RX_Size =  RX_LEN - temp;
-		UsartType.RX_flag=1;
-		HAL_UART_Receive_DMA(&huart1,UsartType.RX_pData,RX_LEN);
-		fifo_puts(&Uart1Fifo,UsartType.RX_pData,UsartType.RX_Size);
-	}
-}
-void USART1_IRQHandler(void)
-{
-	UsartReceive_IDLE(&huart1); 
-	HAL_UART_IRQHandler(&huart1);
-}
-void DMA2_Stream2_IRQHandler(void)
-{
-	HAL_DMA_IRQHandler(&hdma_usart1_rx);
-}
-void DMA2_Stream7_IRQHandler(void)
-{
-	HAL_DMA_IRQHandler(&hdma_usart1_tx);
-}
 
-
-void USART3_IRQHandler(void)
-{
-	HAL_UART_IRQHandler(&huart3);
-}
-void DMA1_Stream1_IRQHandler(void)
-{
-	HAL_DMA_IRQHandler(&hdma_usart3_rx);
-}
-void DMA1_Stream3_IRQHandler(void)
-{
-	HAL_DMA_IRQHandler(&hdma_usart3_tx);
-}
-
-
-
-void USART2_IRQHandler(void)
-{
-	HAL_UART_IRQHandler(&huart2);
-}
-void DMA1_Stream5_IRQHandler(void)
-{
-	HAL_DMA_IRQHandler(&hdma_usart2_rx);
-}
-void DMA1_Stream6_IRQHandler(void)
-{
-	HAL_DMA_IRQHandler(&hdma_usart2_tx);
-}
 
 
 

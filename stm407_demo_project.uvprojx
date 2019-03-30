@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F407xx</Define>
               <Undefine></Undefine>
-              <IncludePath>.\User;.\HAL_lib\STM32F4xx_HAL_Driver\Inc;.\HAL_lib\STM32F4xx_HAL_Driver\Inc\Legacy;.\Core;.\Sys;.\Base;.\App;.\Config;.\FreeRTOS\include;.\FreeRTOS\portable\RVDS\ARM_CM4F;.\FreeRTOS;.\Memory</IncludePath>
+              <IncludePath>.\User;.\HAL_lib\STM32F4xx_HAL_Driver\Inc;.\HAL_lib\STM32F4xx_HAL_Driver\Inc\Legacy;.\Core;.\Sys;.\Base;.\App;.\Config;.\FreeRTOS\include;.\FreeRTOS\portable\RVDS\ARM_CM4F;.\FreeRTOS;.\Memory;.\Debug</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -565,6 +565,21 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>Debug</GroupName>
+          <Files>
+            <File>
+              <FileName>Debugprintf.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Debug\Debugprintf.c</FilePath>
+            </File>
+            <File>
+              <FileName>Debugprintf.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Debug\Debugprintf.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>User</GroupName>
           <Files>
             <File>
@@ -716,6 +731,16 @@
               <FileName>MyTask.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\App\MyTask.h</FilePath>
+            </File>
+            <File>
+              <FileName>Analysis.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\App\Analysis.c</FilePath>
+            </File>
+            <File>
+              <FileName>Analysis.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\App\Analysis.h</FilePath>
             </File>
           </Files>
         </Group>
