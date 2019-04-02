@@ -31,13 +31,11 @@ void _sys_exit(int x)
 }
 int fputc(int ch,FILE *f)
 {
-	while((USART2->SR & 0x40) == 0);
-	USART2->DR = (uint8_t)ch;
+	while((USART1->SR & 0x40) == 0);
+	USART1->DR = (uint8_t)ch;
 	return ch;
 }
 
-#define PRINTF_BUF_SIZE			512
-static u8 print_buffer[PRINTF_BUF_SIZE];//打印缓存
 /*******************************************************************************
 * @Function		:printf_dma()
 * @Description	:使用dma进行串口重定向
@@ -48,12 +46,13 @@ static u8 print_buffer[PRINTF_BUF_SIZE];//打印缓存
 *******************************************************************************/
 void printf_dma(const char *format, ...)
 {
-	uint32_t length;
+	char print_buffer[512];
+	u16 length;
 	va_list args; 
 	while((USART1->SR&0X40)==0);//等待串口发送完成
 	va_start(args, format);
 	length = vsnprintf((char*)print_buffer, sizeof(print_buffer), (char*)format, args);//格式化内容
-	while(HAL_BUSY == HAL_UART_Transmit_DMA(&huart1,print_buffer,length));//等待发送完成
+	while(HAL_BUSY == HAL_UART_Transmit_DMA(&huart1,(u8 *)print_buffer,length));//等待发送完成
 	va_end(args);
 }
 

@@ -742,6 +742,16 @@
               <FileType>5</FileType>
               <FilePath>.\App\Analysis.h</FilePath>
             </File>
+            <File>
+              <FileName>Command.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\App\Command.c</FilePath>
+            </File>
+            <File>
+              <FileName>Command.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\App\Command.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

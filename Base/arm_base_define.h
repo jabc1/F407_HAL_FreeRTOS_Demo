@@ -12,7 +12,6 @@ Modify Time:
 #define _arm_base_define_
 
 #include "stm32f4xx_hal.h"
-#include "Debugprintf.h"
 
 #include <stdbool.h>
 #include <stdio.h>
@@ -51,15 +50,15 @@ typedef volatile unsigned char  const 	vuc8;   /* Read Only */
 #define  MEM_U16( x )  					( *( (u16 *) (x) ) )
 //获取最大值和最小值
 //#define  MAX( x, y ) 					( ((x) > (y)) ? (x) : (y) )
-#define  MAX(X,Y) ({ \
-					typeof (X) x_ = (X); \
-					typeof (Y) y_ = (Y); \
-					(x_ > y_) ? x_ : y_; })
+#define  MAX(X,Y)						({ \
+											typeof (X) x_ = (X); \
+											typeof (Y) y_ = (Y); \
+											(x_ > y_) ? x_ : y_; })
 //#define  MIN( x, y ) 					( ((x) < (y)) ? (x) : (y) )
-#define  MIN(X,Y) ({ \
-					typeof (X) x_ = (X); \
-					typeof (Y) y_ = (Y); \
-					(x_ < y_) ? x_ : y_; })//增加容错
+#define  MIN(X,Y)						({ \
+											typeof (X) x_ = (X); \
+											typeof (Y) y_ = (Y); \
+											(x_ < y_) ? x_ : y_; })//增加容错
 //将一个字母转换为大写
 #define  UPCASE( c ) 					( ((c) >= 'a' && (c) <= 'z') ? ((c) - 0x20) : (c) )
 //获取数组元素的个数
