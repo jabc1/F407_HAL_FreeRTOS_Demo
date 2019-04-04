@@ -752,6 +752,36 @@
               <FileType>5</FileType>
               <FilePath>.\App\Command.h</FilePath>
             </File>
+            <File>
+              <FileName>Wifi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\App\Wifi.c</FilePath>
+            </File>
+            <File>
+              <FileName>Wifi.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\App\Wifi.h</FilePath>
+            </File>
+            <File>
+              <FileName>WifiCon.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\App\WifiCon.c</FilePath>
+            </File>
+            <File>
+              <FileName>WifiCon.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\App\WifiCon.h</FilePath>
+            </File>
+            <File>
+              <FileName>WifiConfig.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\App\WifiConfig.c</FilePath>
+            </File>
+            <File>
+              <FileName>WifiConfig.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\App\WifiConfig.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

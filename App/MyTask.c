@@ -7,6 +7,7 @@
 #include "Debugprintf.h"
 #include "Command.h"
 #include "Analysis.h"
+#include "Wifi.h"
 
 //任务优先级
 #define START_TASK_PRIO		1
@@ -32,6 +33,12 @@ void master2_task(void *pvParameters);
 TaskHandle_t MASTER3Task_Handler;
 void master3_task(void *pvParameters);
 
+#define MASTER4_TASK_PRIO		3
+#define MASTER4_STK_SIZE 		50
+TaskHandle_t MASTER4Task_Handler;
+void master_wifi_task(void *pvParameters);
+
+
 void start_system()
 {
 	xTaskCreate((TaskFunction_t )start_task,            //任务函数
@@ -54,18 +61,25 @@ void start_task(void *pvParameters)
 				(TaskHandle_t*  )&MASTER1Task_Handler);
 
 	xTaskCreate((TaskFunction_t )master2_task,
-				(const char*    )"master2_tas",
+				(const char*    )"master2_task",
 				(uint16_t       )MASTER2_STK_SIZE,
 				(void*          )NULL,
 				(UBaseType_t    )MASTER2_TASK_PRIO,
 				(TaskHandle_t*  )&MASTER2Task_Handler);
 
 	xTaskCreate((TaskFunction_t )master3_task,
-				(const char*    )"master3_tas",
+				(const char*    )"master3_task",
 				(uint16_t       )MASTER3_STK_SIZE,
 				(void*          )NULL,
 				(UBaseType_t    )MASTER3_TASK_PRIO,
 				(TaskHandle_t*  )&MASTER3Task_Handler);
+				
+	xTaskCreate((TaskFunction_t )master_wifi_task,
+				(const char*    )"master_wifi_task",
+				(uint16_t       )MASTER4_STK_SIZE,
+				(void*          )NULL,
+				(UBaseType_t    )MASTER4_TASK_PRIO,
+				(TaskHandle_t*  )&MASTER4Task_Handler);
 	vTaskDelete(StartTask_Handler);	//删除开始任务
 	taskEXIT_CRITICAL();			//退出临界区
 }
@@ -76,6 +90,8 @@ void master1_task(void *pvParameters)
 	//u16 time = 0;
 	u8 i=0;
 	//one_cmd();
+	//cmd_read();
+	wifi_init();
 	while(1)
 	{
 		i = !i;
@@ -97,7 +113,6 @@ void master1_task(void *pvParameters)
 void master2_task(void *pvParameters)
 {
 	u8 t1,t2,t3;
-	u8 len,lentemp;
 	u8 buf[10];
 	while(1)
 	{
@@ -115,7 +130,6 @@ void master2_task(void *pvParameters)
 void master3_task(void *pvParameters)
 {
 	u8 len,lentemp;
-	u8 buf[10];
 	while(1)
 	{
 		if(!fifo_empty(&Uart1Fifo))
@@ -129,7 +143,29 @@ void master3_task(void *pvParameters)
 	}
 }
 
-
+void master_wifi_task(void *pvParameters)
+{
+	u8 buf[10];
+	while(1)
+	{
+		if(Wifi_t.connect)
+		{
+			if(!fifo_empty(&WifiFifo))
+			{
+				if(fifo_gets(&WifiFifo,buf,10))
+				{
+					printf_dma("%s",buf);
+					wifi_printf("test tcp send");
+				}
+			}
+		}
+		else
+		{
+			;
+		}
+		vTaskDelay(30);
+	}
+}
 
 
 

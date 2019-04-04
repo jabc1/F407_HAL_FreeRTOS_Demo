@@ -6,7 +6,7 @@
 #include "SysTime.h"
 #include "SysGpio.h"
 #include "SysUart.h"
-
+#include "Wifi.h"
 
 int main(void)
 {

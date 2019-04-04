@@ -4,12 +4,6 @@
 #include "SysUart.h"
 
 void printf_dma(const char *format, ...);
+void wifi_printf(const char *format, ...);
 
 #endif
-
-
-
-
-
-
-

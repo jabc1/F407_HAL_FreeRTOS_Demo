@@ -135,17 +135,17 @@ void DMA2_Stream7_IRQHandler(void)
 
 void USART2_IRQHandler(void)
 {
-//	u16 temp;
+	u16 temp;
 	HAL_UART_IRQHandler(&huart2);
-//	if(__HAL_UART_GET_FLAG(&huart2,UART_FLAG_IDLE) != RESET)
-//	{
-//		__HAL_UART_CLEAR_IDLEFLAG(&huart2);
-//		HAL_UART_DMAStop(&huart2);
-//		temp = huart2.hdmarx->Instance->NDTR;
-//		Uart2DMA.RX_Size =  RX_LEN - temp;
-//		HAL_UART_Receive_DMA(&huart2,Uart2DMA.RX_pData,RX_LEN);
-//		fifo_puts(&Uart1Fifo,Uart2DMA.RX_pData,Uart2DMA.RX_Size);
-//	}
+	if(__HAL_UART_GET_FLAG(&huart2,UART_FLAG_IDLE) != RESET)
+	{
+		__HAL_UART_CLEAR_IDLEFLAG(&huart2);
+		HAL_UART_DMAStop(&huart2);
+		temp = huart2.hdmarx->Instance->NDTR;
+		Uart2DMA.RX_Size =  RX_LEN - temp;
+		HAL_UART_Receive_DMA(&huart2,Uart2DMA.RX_pData,RX_LEN);
+		fifo_puts(&WifiFifo,Uart2DMA.RX_pData,Uart2DMA.RX_Size);
+	}
 }
 void DMA1_Stream5_IRQHandler(void)
 {
