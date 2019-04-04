@@ -48,17 +48,14 @@ int fputc(int ch,FILE *f)
 *******************************************************************************/
 void printf_dma(const char *format, ...)
 {
-	char print_buffer[512];
+	static char print_buffer[256];
 	u16 length;
 	va_list args;
-	while(HAL_DMA_GetState(&hdma_usart1_tx) == HAL_DMA_STATE_BUSY)
-	{
-		delay_us(1);
-	}
+	while(HAL_DMA_GetState(&hdma_usart1_tx) == HAL_DMA_STATE_BUSY);
 	__HAL_DMA_DISABLE(&hdma_usart1_tx);
-	//while((USART1->SR&0X40)==0);//等待串口发送完成
 	va_start(args, format);
-	length = vsnprintf(print_buffer, sizeof(print_buffer), (char*)format, args);//格式化内容
+	length = vsnprintf(print_buffer, sizeof(print_buffer), (char*)format, args);
+	//while(HAL_BUSY == HAL_UART_Transmit_DMA(&huart1,(u8 *)print_buffer,length));
 	HAL_UART_Transmit_DMA(&huart1,(u8 *)print_buffer,length);
 	va_end(args);
 }
@@ -73,18 +70,15 @@ void printf_dma(const char *format, ...)
 *******************************************************************************/
 void wifi_printf(const char *format, ...)
 {
-	char print_buffer[512];
+	static char print_buffer[256];
 	u16 length;
 	va_list args;
-	while(HAL_DMA_GetState(&hdma_usart2_tx) == HAL_DMA_STATE_BUSY)
-	{
-		delay_us(1);
-	}
+	while(HAL_DMA_GetState(&hdma_usart2_tx) == HAL_DMA_STATE_BUSY);
 	__HAL_DMA_DISABLE(&hdma_usart2_tx);
-//	while((USART2->SR&0X40)==0);//等待串口发送完成
 	va_start(args, format);
-	length = vsnprintf((char*)print_buffer, sizeof(print_buffer), (char*)format, args);//格式化内容
-	HAL_UART_Transmit_DMA(&huart2,(u8 *)print_buffer,length);//等待发送完成
+	length = vsnprintf((char*)print_buffer, sizeof(print_buffer), (char*)format, args);
+	//while(HAL_BUSY == HAL_UART_Transmit_DMA(&huart2,(u8 *)print_buffer,length));
+	HAL_UART_Transmit_DMA(&huart2,(u8 *)print_buffer,length);
 	va_end(args);
 }
 

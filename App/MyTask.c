@@ -145,17 +145,18 @@ void master3_task(void *pvParameters)
 
 void master_wifi_task(void *pvParameters)
 {
-	u8 buf[10];
+	static u8 buf[10];
 	while(1)
 	{
 		if(Wifi_t.connect)
 		{
 			if(!fifo_empty(&WifiFifo))
 			{
+				memset(buf,0,sizeof(buf));
 				if(fifo_gets(&WifiFifo,buf,10))
 				{
 					printf_dma("%s",buf);
-					wifi_printf("test tcp send");
+					wifi_printf("%s",buf);
 				}
 			}
 		}
