@@ -8,6 +8,8 @@
 #include "Command.h"
 #include "Analysis.h"
 #include "Wifi.h"
+#include "Pack.h"
+#include "WifiCon.h"
 
 //任务优先级
 #define START_TASK_PRIO		1
@@ -19,28 +21,29 @@ TaskHandle_t StartTask_Handler;
 void start_task(void *pvParameters);
 
 #define MASTER1_TASK_PRIO		2
-#define MASTER1_STK_SIZE 		50
+#define MASTER1_STK_SIZE 		512
 TaskHandle_t MASTER1Task_Handler;
 void master1_task(void *pvParameters);
 
 #define MASTER2_TASK_PRIO		3
-#define MASTER2_STK_SIZE 		50
+#define MASTER2_STK_SIZE 		512
 TaskHandle_t MASTER2Task_Handler;
 void master2_task(void *pvParameters);
 
-#define MASTER3_TASK_PRIO		3
-#define MASTER3_STK_SIZE 		50
+#define MASTER3_TASK_PRIO		4
+#define MASTER3_STK_SIZE 		64
 TaskHandle_t MASTER3Task_Handler;
 void master3_task(void *pvParameters);
 
-#define MASTER4_TASK_PRIO		3
-#define MASTER4_STK_SIZE 		50
+#define MASTER4_TASK_PRIO		5
+#define MASTER4_STK_SIZE 		64
 TaskHandle_t MASTER4Task_Handler;
 void master_wifi_task(void *pvParameters);
 
 
 void start_system()
 {
+	
 	xTaskCreate((TaskFunction_t )start_task,            //任务函数
 				(const char*    )"start_task",          //任务名称
 				(uint16_t       )START_STK_SIZE,        //任务堆栈大小
@@ -88,10 +91,12 @@ void start_task(void *pvParameters)
 void master1_task(void *pvParameters)
 {
 	//u16 time = 0;
-	u8 i=0;
+	bool i=false;
 	//one_cmd();
 	//cmd_read();
-	wifi_init();
+	//wifi_init();
+	//wifi_reset();
+	testcj();
 	while(1)
 	{
 		i = !i;
@@ -106,22 +111,25 @@ void master1_task(void *pvParameters)
 			SET_GPIO_H(LED2_GPIO);
 		}
 		//printf_dma("uart1 dma printf=%04d\n",time++);
-		vTaskDelay(100);
+		//wifi_con();
+
+		vTaskDelay(200);
 	}
 }
 
 void master2_task(void *pvParameters)
 {
-	u8 t1,t2,t3;
-	u8 buf[10];
+	u8 tagtype,type,taglen;
+	u8 buf[12];
+	Wifi_t.respond = true;
 	while(1)
 	{
-		if(!fifo_empty(&TagFifo))
+		memset(buf,0,sizeof(buf));
+		if((!fifo_empty(&TagFifo))&&(Wifi_t.respond == true))
 		{
-			memset(buf,0,sizeof(buf));
-			tag_out_fifo(&TagFifo,&t1,&t2,&t3,&buf[0]);
-			printf_dma("%d%d%d%s",t1,t2,t3,buf);
-			//printf("%d%d%d%s",t1,t2,t3,buf);
+			tag_out_fifo(&TagFifo,&tagtype,&type,&taglen,&buf[0]);
+			Pack(buf,taglen,0x0a);
+			Wifi_t.respond = false;
 		}
 		vTaskDelay(30);
 	}
@@ -145,18 +153,20 @@ void master3_task(void *pvParameters)
 
 void master_wifi_task(void *pvParameters)
 {
-	static u8 buf[10];
+	u8 buf[20];
+	u8 temp;
+	u16 len,tlen;
 	while(1)
 	{
 		if(Wifi_t.connect)
 		{
 			if(!fifo_empty(&WifiFifo))
 			{
-				memset(buf,0,sizeof(buf));
-				if(fifo_gets(&WifiFifo,buf,10))
+				temp = fifo_find(&WifiFifo,(u8 *)"msg!ok",6);
+				if(fifo_cmp(&WifiFifo,temp,(u8 *)"msg!ok",6))
 				{
-					printf_dma("%s",buf);
-					wifi_printf("%s",buf);
+					fifo_Clr(&WifiFifo);
+					Wifi_t.respond = true;
 				}
 			}
 		}
@@ -164,7 +174,7 @@ void master_wifi_task(void *pvParameters)
 		{
 			;
 		}
-		vTaskDelay(30);
+		vTaskDelay(50);
 	}
 }
 

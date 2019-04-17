@@ -4,10 +4,10 @@
 #include "arm_base_define.h"
 #include "Fifo.h"
 
-#define		Uart1Len			512*2+1//用于串口通信数据缓存
-#define		TagCacheLen			512*2+1//用于缓存标签信息
-#define		TagLen				512*2+1//用于缓存解析出来的信息
-#define		WifiLen				512+1//用于连接wifi数据缓存
+#define		Uart1Len			512*6+1//用于串口通信数据缓存
+#define		TagCacheLen			512*6+1//用于缓存标签信息
+#define		TagLen				512*4+1//用于缓存解析出来的信息
+#define		WifiLen				512*2+1//用于连接wifi数据缓存
 
 extern FIFO_t	Uart1Fifo;
 extern u8 Uart1Buf[];

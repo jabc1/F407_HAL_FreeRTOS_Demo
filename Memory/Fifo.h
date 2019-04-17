@@ -40,7 +40,8 @@ u8 fifo_putc(FIFO_t *head, u8 data);				//如对一个字符操作
 u8 fifo_getc(FIFO_t *head, u8 *data);				//出队一个字符操作
 u32 fifo_find(FIFO_t *head, const u8 *data, u32 len);//队列查找功能
 u8 fifo_cmp(const FIFO_t *fifo, u32 seat, const u8 *cmp, u32 cmpsize);//内容对比功能
-
+u32 fifo_surplusSize(FIFO_t *head);					//队列剩余空间判断
+u8 fifo_full(FIFO_t *head);							//队满判断
 #endif
 
 

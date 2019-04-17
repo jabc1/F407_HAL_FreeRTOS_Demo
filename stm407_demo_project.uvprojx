@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F407xx</Define>
               <Undefine></Undefine>
-              <IncludePath>.\User;.\HAL_lib\STM32F4xx_HAL_Driver\Inc;.\HAL_lib\STM32F4xx_HAL_Driver\Inc\Legacy;.\Core;.\Sys;.\Base;.\App;.\Config;.\FreeRTOS\include;.\FreeRTOS\portable\RVDS\ARM_CM4F;.\FreeRTOS;.\Memory;.\Debug</IncludePath>
+              <IncludePath>.\User;.\HAL_lib\STM32F4xx_HAL_Driver\Inc;.\HAL_lib\STM32F4xx_HAL_Driver\Inc\Legacy;.\Core;.\Sys;.\Base;.\App;.\Config;.\FreeRTOS\include;.\FreeRTOS\portable\RVDS\ARM_CM4F;.\FreeRTOS;.\Memory;.\Debug;.\jSON</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -620,6 +620,41 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>cjson</GroupName>
+          <Files>
+            <File>
+              <FileName>cJSON.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\jSON\cJSON.c</FilePath>
+            </File>
+            <File>
+              <FileName>cJSON.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\jSON\cJSON.h</FilePath>
+            </File>
+            <File>
+              <FileName>s2j.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\jSON\s2j.c</FilePath>
+            </File>
+            <File>
+              <FileName>s2j.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\jSON\s2j.h</FilePath>
+            </File>
+            <File>
+              <FileName>s2jdef.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\jSON\s2jdef.h</FilePath>
+            </File>
+            <File>
+              <FileName>test.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\jSON\test.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>Sys</GroupName>
           <Files>
             <File>
@@ -781,6 +816,16 @@
               <FileName>WifiConfig.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\App\WifiConfig.h</FilePath>
+            </File>
+            <File>
+              <FileName>Pack.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\App\Pack.c</FilePath>
+            </File>
+            <File>
+              <FileName>Pack.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\App\Pack.h</FilePath>
             </File>
           </Files>
         </Group>

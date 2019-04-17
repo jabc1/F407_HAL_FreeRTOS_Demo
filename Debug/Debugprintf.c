@@ -9,7 +9,6 @@ Modify			:
 Modify Time		: 
 ******************************************************************************/
 #include "Debugprintf.h"
-#include "Delay.h"
 
 /*******************************************************************************
 * @Function		:printf(const char *format, ...)
@@ -30,6 +29,10 @@ FILE __stdout;
 void _sys_exit(int x)
 {
 	x = x;
+}
+void _ttywrch(int ch)
+{
+    ch = ch;
 }
 int fputc(int ch,FILE *f)
 {
@@ -82,7 +85,23 @@ void wifi_printf(const char *format, ...)
 	va_end(args);
 }
 
-
+/*******************************************************************************
+* @Function		:pack_printf()
+* @Description	:发送指定长度内容
+* @Input		:len长度*data内容
+* @Output		:null
+* @Return		:null
+* @Others		:null
+*******************************************************************************/
+void pack_printf(u8 *data,u16 len)
+{
+	u16 i;
+	for(i=0;i<len;i++)
+	{
+		while((USART1->SR & 0x40) == 0);
+		USART1->DR = (uint8_t)data[i];
+	}
+}
 
 
 

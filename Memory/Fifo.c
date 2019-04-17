@@ -10,9 +10,6 @@ Modify Time		:
 ******************************************************************************/
 #include "Fifo.h"
 
-static u32 fifo_surplusSize(FIFO_t *head); //队列剩余空间判断
-static u8 fifo_full(FIFO_t *head);         //队满判断
-
 /*******************************************************************************
 * @Function		:u8 fifo_init(FIFO_t *head, u8 *buf, u32 len)
 * @Description	:队列初始化
@@ -67,7 +64,7 @@ u8 fifo_empty(FIFO_t *head)
 * @Return		:TRUE(队列已满)/FALSE
 * @Others		:null
 *******************************************************************************/
-static u8 fifo_full(FIFO_t *head)
+u8 fifo_full(FIFO_t *head)
 {
 
 	return ((head->front == ((head->rear+1)%head->size)) ? TRUE : FALSE);
@@ -81,7 +78,7 @@ static u8 fifo_full(FIFO_t *head)
 * @Return		:剩余空间大小(字符为单位)
 * @Others		:null
 *******************************************************************************/
-static u32 fifo_surplusSize(FIFO_t *head)
+u32 fifo_surplusSize(FIFO_t *head)
 {
 	return ((head->front > head->rear)
 			? (head->front - head->rear - 1)
@@ -93,7 +90,7 @@ static u32 fifo_surplusSize(FIFO_t *head)
 * @Description	:查询队列有效空间大小
 * @Input		:*head:队列头
 * @Output		:null
-* @Return		:剩余空间大小(字符为单位)
+* @Return		:已用空间大小(字符为单位)
 * @Others		:null
 *******************************************************************************/
 u32 fifo_validSize(FIFO_t *head)
@@ -125,8 +122,9 @@ u8 fifo_puts(FIFO_t *head, u8 *data, u32 len)
 
 	head->rear = (head->rear + len)%head->size;
 
-    return TRUE;   
+	return TRUE;   
 }
+
 /*******************************************************************************
 * @Function		:u8 fifo_gets(FIFO_t *head, u8 *data, u32 len)
 * @Description	:出队字符串操作
@@ -149,7 +147,7 @@ u8 fifo_gets(FIFO_t *head, u8 *data, u32 len)
 
 	head->front = (head->front + len)%head->size;
 
-    return TRUE;   
+	return TRUE;   
 }
 
 /*******************************************************************************
